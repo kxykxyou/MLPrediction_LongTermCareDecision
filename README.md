@@ -1,10 +1,20 @@
-2022工研院第四梯次AI與資料科學人才訓練班，AIDEA平台上的課程競賽
+This prediction model is for the in-class contest(AI and data science training class held by ITRI).
 
-## 原始檔案說明
-1. train.csv: 長照機構的訓練資料集，所有參數都已經被模糊化；預測目標一共分三類，對應到檔案中的Y；其中Y = 2的類別非常少，屬於不平衡分類問題
-2. test.csv: 測試資料集，欄位除了Y以外都與訓練資料集相同；共300筆資料
+### brief data description
+- Including 2 sets, train.csv and test.csv, dimension (2879 observations , 46 predictors, 1 label) and (300 observations, 46 predictors)
+- No missing value
+- All features are dummy variables; feature names are encoded instead of real feature names.
 
-## model建立流程
-1. 無缺值，全部欄位都屬於dummy variable
-2. 使用Random forest model(RF model)進行變數挑選；建立30個RF model確認變數重要性的排序，篩選大於重要性 > 0.02的變數進行模型建立；另也使用Chi-square挑選12個最重要的變數
-3. 使用xgboost model建立模型；調整參數；使用logloss做為metric 。
+### two approaches for feature selection
+- Feature selection-1: train 30 random forest models(RF model) to validate feature importance. Then filter features with importance > 0.02.
+- Feature selection-2: select 12 features with chi-square test
+
+### model training approach: xgboost
+- object: softprob
+- metric: logloss
+- tuning method: one-factor-at-a-time
+- parameter tuning order: n_estimators --> max_depth --> min_child_weight --> gamma --> regalpha --> eta
+
+### model evaluation:
+- training set logloss: 0.49
+- testing set logloss: 0.49 (rank: 7/20 participant; best score: 0.45; total classmates: 50)
